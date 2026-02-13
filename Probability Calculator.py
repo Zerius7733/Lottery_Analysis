@@ -113,4 +113,5 @@ def inverse_printing(inverse_tuple):
     print(f"Number of years and draws for {choice}: {years:.2f} , {draws:.2f}")
     return
 
-main()
+if __name__ == "__main__":    
+    main()
