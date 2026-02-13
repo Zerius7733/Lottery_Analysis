@@ -1,5 +1,5 @@
 import math
-from toto_priv import num_roll
+from toto_new_payout import num_roll
 #create menu - ok
 #implement functions - ok 
 # add more features
