@@ -1,4 +1,5 @@
 import math 
+from roll_cost import roll_cost
 total_comb = math.comb(49,6)
 def main():
     while True:
@@ -35,10 +36,17 @@ def test():
 
 def prob():
     n = int(input("Number of draws: "))
+    roll_size = int(input("Roll how many numbers: "))
     print(f"Number of weeks in {n} draws is {float(n/2)}")
-    all_failure = math.pow(1-num_roll()/100,n)
-    prob = 1 - all_failure 
-    print(f"The odds of at least 1 success for 4 num roll: {prob*100:.3f}%")
+    odds_at_least_2 = num_roll(roll_size, 2) / 100
+    failure_at_least_2 = math.pow(1-odds_at_least_2,n)
+    print(f"The odds of at least 1 success for at least 2 matches in a {roll_size} num roll: {(1-failure_at_least_2)*100:.3f}%")
+    odds_at_least_3 = num_roll(roll_size, 3) / 100
+    failure_at_least_3 = math.pow(1-odds_at_least_3,n)
+    print(f"The odds of at least 1 success for at least 3 matches in a {roll_size} num roll: {(1-failure_at_least_3)*100:.3f}%")
+    odds_at_least_4 = num_roll(roll_size, 4) / 100
+    failure_at_least_4 = math.pow(1-odds_at_least_4,n)
+    print(f"The odds of at least 1 success for at least 4 matches in a {roll_size} num roll: {(1-failure_at_least_4)*100:.3f}%")
     odds_3num = num_k(3)/100
     failure_3num = math.pow(1-odds_3num,n)
     print(f"The odds of at least 1 success for 3 num only: {(1-failure_3num)*100:.3f}%")
@@ -54,7 +62,7 @@ def odds() :
                 \n2. 2 num\
                 \n3. 3 num\
                 \n4. 4 num\
-                \n5. roll 4 num\
+                \n5. roll k num\
                 \n6. Expected Payout\
                 \n7. iToto odds\
                 \nEnter(0 to exit):', end='')
@@ -64,7 +72,11 @@ def odds() :
         elif choice in [2,3,4]:
             print(f'The odds of striking {choice} number:{num_k(choice):.5f}%.')
         elif choice == 5: 
-            print(f'The odds of striking at least 2 number:{num_roll():.5f}%.')
+            roll_size = int(input("Roll how many numbers: "))
+            print(f'The odds of striking at least 2 number with {roll_size} numbers:{num_roll(roll_size, 2):.5f}%.')
+            print(f'The odds of striking at least 3 number with {roll_size} numbers:{num_roll(roll_size, 3):.5f}%.')
+            print(f'The odds of striking at least 4 number with {roll_size} numbers:{num_roll(roll_size, 4):.5f}%.')
+            print(f'The expected price to pay for roll {roll_size} num is: ${roll_cost(roll_size)}.')
         elif choice == 6:
             print(f'{expected_payout():.2f}')
         elif choice == 7:
@@ -90,10 +102,10 @@ def num_k(k):
     odds = num_k/total_comb
     return odds*100
 
-def num_roll():
+def num_roll(roll_size, min_match=2):
     num_roll = 0
-    for k in range(2,5):
-        num_roll += math.comb(4,k)*num_k(k)
+    for k in range(min_match, min(roll_size, 6) + 1):
+        num_roll += math.comb(roll_size,k)*num_k(k)
         
     return num_roll
 
@@ -106,6 +118,7 @@ def itoto_odds():
         odds += k_odds
         print (f"Odds of {k} num: {k_odds*100:.5f}%")
     return odds*100
-print(math.comb(47,4)*math.comb(4,2))
+
+#print(math.comb(47,4)*math.comb(4,2))
 if __name__ == "__main__":
     main() 
